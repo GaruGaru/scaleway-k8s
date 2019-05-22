@@ -1,11 +1,7 @@
 provider "scaleway" {
-  organization = "<YOUR-ORGANIZATION-ID>"
-  token        = "<YOUR-SECRET-TOKEN>"
-  region       = "par1"
-}
-
-provider "scaleway" {
-  region  = "${var.region}"
+  organization = "${var.scw_organization_id}"
+  token = "${var.scw_secret_token}"
+  region = "${var.region}"
   version = "1.9.2"
 }
 
@@ -15,5 +11,5 @@ provider "external" {
 
 data "scaleway_image" "debian" {
   architecture = "x86_64"
-  name         = "${var.image}"
+  name = "${var.image}"
 }
