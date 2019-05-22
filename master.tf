@@ -13,8 +13,10 @@ resource "scaleway_server" "kube-master" {
     private_key = "${file("~/.ssh/id_rsa")}"
   }
 
-  provisioner "local-exec" {
-    command = " export ANSIBLE_HOST_KEY_CHECKING=False; ansible-playbook -u root -i '${scaleway_server.kube-master.public_ip},' playbooks/master.yml"
+  provisioner "remote-exec" {
+    scripts = [
+      "scripts/kubeadm.sh"
+    ]
   }
 
 
