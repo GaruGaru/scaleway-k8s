@@ -22,7 +22,7 @@ variable "prefix" {
 }
 
 variable "nodes_count" {
-  default = 0
+  default = 2
   description = "number of non-master nodes"
 }
 
