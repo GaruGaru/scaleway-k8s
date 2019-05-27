@@ -24,7 +24,7 @@ resource "scaleway_server" "kube-master" {
 
     inline = [
       "sysctl net.bridge.bridge-nf-call-iptables=1",
-      "kubeadm init --pod-network-cidr=10.244.0.0/16 --apiserver-advertise-address=${self.private_ip} --apiserver-cert-extra-sans=${self.public_ip}",
+      "kubeadm init --pod-network-cidr=10.244.0.0/16 --apiserver-advertise-address=${self.private_ip} --apiserver-cert-extra-sans=${self.public_ip} --apiserver-extra-args=\"service-node-port-range=8000-40000\"",
       "mkdir -p $HOME/.kube",
       "cp -i /etc/kubernetes/admin.conf $HOME/.kube/config",
       "chown $(id -u):$(id -g) $HOME/.kube/config",
@@ -40,6 +40,10 @@ resource "scaleway_server" "kube-master" {
   provisioner "file" {
     source      = "deployments/"
     destination = "/tmp/"
+  }
+
+  provisioner "remote-exec" {
+
   }
 
 }
@@ -59,6 +63,7 @@ data "external" "kubeadm_join" {
   query = {
     host = "${scaleway_ip.master_ip.0.ip}"
   }
+
 }
 
 output "kubeadm_join_command" {
